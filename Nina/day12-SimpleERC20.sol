@@ -20,7 +20,7 @@ contract SimpleERC20 {
         emit Transfer(address(0), msg.sender, totalSupply); // 铸造事件 // 部署者最初持有 100%的代币
     }
 
-    function transfer(address _to, uint256 _value) public returns (bool) { // mutability是non-payable，修改了balanceOf映射
+    function transfer(address _to, uint256 _value) public virtual returns (bool) { // mutability是non-payable，修改了balanceOf映射
         require(balanceOf[msg.sender] >= _value, "Not enough balance");
         _transfer(msg.sender, _to, _value);
         return true;
@@ -37,7 +37,7 @@ contract SimpleERC20 {
     }
     // 这是所有委托代币交易的基础——比如在 DEX 上交易、订阅服务或参与收益农场。
 
-    function transferFrom(address _from, address _to, uint256 _value) public returns (bool) {
+    function transferFrom(address _from, address _to, uint256 _value) public virtual returns (bool) {
         require(balanceOf[_from] >= _value, "Not enough balance");
         require(allowance[_from][msg.sender] >= _value, "Allowance too low");
 
@@ -59,4 +59,7 @@ contract SimpleERC20 {
             - 减少重复逻辑的 bug
             - 余额更新的单一真实来源
         transfer()和 transferFrom()都依赖于_transfer()来保持一致性并遵循 DRY（不要重复自己）原则。*/
+
+//vitual：如果有其他合约继承了这个合约，这个函数是可以被重新修改的。
+
 }
